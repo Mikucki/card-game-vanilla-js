@@ -1,67 +1,39 @@
-function getDiceRollArray(diceCount) {
-  let newDiceRolls = [];
-  for (let i = 0; i < diceCount; i++) {
-    newDiceRolls.push(Math.floor(Math.random() * 6) + 1);
-  }
-  return newDiceRolls;
-}
+import characterData from './data.js'
+import Character from './Character.js'
 
 /*
-Challenge 
-1. Create a function called getDiceHtml. 
-2. getDiceHtml should map over the array of dice rolls 
-   returned from getDiceRollArray to generate the html 
-   we need to render our dice with random values. This is 
-   the HTML: `<div class="dice">DICE VALUE HERE</div>`
-3. Think about the parameters and arguments!
-4. Down in renderCharacter(), set diceHtml equals to our 
-   new getDiceHtml function. Remember to give it the argument
-   it needs. 
-5. Delete any code we no longer need.
-**hint.md for help**
+CHALLENGE
+1. Inside attack(), check if either character is dead.
+If they are, call a new function called endGame().
+2. Set up the new function endGame() and have it 
+log out "the game is over".
 */
-function getDiceHtml() {
-  newArr = getDiceRollArray(3);
-  return newArr.map(function (item) {
-    return `<div class="dice">${item}</div>`;
-  });
+
+function attack() {
+    wizard.getDiceHtml()
+    orc.getDiceHtml()
+    wizard.takeDamage(orc.currentDiceScore)
+    orc.takeDamage(wizard.currentDiceScore)
+    render()
+    if(wizard.dead || orc.dead){
+        endGame()
+    }
 }
 
-const hero = {
-  elementId: "hero",
-  name: "Wizard",
-  avatar: "img/cat.jpg",
-  health: 60,
-  diceRoll: [3, 1, 4],
-  diceCount: 3,
-};
-
-const monster = {
-  elementId: "monster",
-  name: "Orc",
-  avatar: "img/dog.jpg",
-  health: 10,
-  diceRoll: [6],
-  diceCount: 1,
-};
-
-function renderCharacter(data) {
-  const { elementId, name, avatar, health, diceRoll, diceCount } = data;
-  const diceHtml = diceRoll
-    .map(function (num) {
-      return `<div class="dice">${num}</div>`;
-    })
-    .join("");
-
-  document.getElementById(elementId).innerHTML = `<div class="character-card">
-            <h4 class="name"> ${name} </h4>
-            <img class="avatar" src="${avatar}" />
-            <div class="health">health: <b> ${health} </b></div>
-            <div class="dice-container">    
-                ${getDiceHtml()}
-            </div>
-        </div>`;
+function endGame(){
+    console.log('The game is over')
 }
 
-renderCharacter(hero);
-renderCharacter(monster);
+
+
+
+document.getElementById("attack-button").addEventListener('click', attack)
+
+function render() {
+    document.getElementById('hero').innerHTML = wizard.getCharacterHtml()
+    document.getElementById('monster').innerHTML = orc.getCharacterHtml()
+}
+
+const wizard = new Character(characterData.hero)
+const orc = new Character(characterData.monster)
+render()
