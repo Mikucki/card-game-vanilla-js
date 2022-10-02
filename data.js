@@ -7,7 +7,7 @@ const characterData = {
     currentDiceScore: [],
   },
   orc: {
-    name: "WOoden Herro",
+    name: "WOodenn Herro",
     avatar: "images/orc.png",
     health: 30,
     diceCount: 1,
